@@ -47,15 +47,15 @@ const Typography = ({setTabOpen, popupOnRight}) => {
   };
 
   return (
-    <div id="element-typography-overlay" className={popupOnRight ? "popup-right" : "popup-left"}>
-      <button id="close-typography-btn" onClick={() => setTabOpen(state => ({...state, typography: false}))}>Close</button>
+    <div className={`element-typography-overlay ${popupOnRight ? "popup-right" : "popup-left"}`}>
+      <button className="close-typography-btn" onClick={() => setTabOpen(state => ({...state, typography: false}))}>Close</button>
       <h3 style={{color: "#676767"}}>Typography</h3>
 
-      <div id="typography-main-flex-container">
+      <div className="typography-main-flex-container">
         {typographyStyles.length 
           ? typographyStyles.map((style, index) => (
             <div 
-              id="typography-box" 
+              className="typography-box" 
               key={index}
               onClick={e => handleClickTypography(style, e)}  
             >

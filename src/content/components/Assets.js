@@ -31,17 +31,17 @@ const Assets = ({setTabOpen, popupOnRight}) => {
   };
 
   return (
-    <div id="element-assets-overlay" className={popupOnRight ? "popup-right" : "popup-left"}>
-      <button id="close-assets-btn" onClick={() => setTabOpen(state => ({...state, assets: false}))}>Close</button>
+    <div className={`element-assets-overlay ${popupOnRight ? "popup-right" : "popup-left"}`}>
+      <button className="close-assets-btn" onClick={() => setTabOpen(state => ({...state, assets: false}))}>Close</button>
       <h3 style={{color: "#676767"}}>Asset Files</h3>
 
-      <div id="assets-main-flex-container">
+      <div className="assets-main-flex-container">
         {images.length 
           ? images.map((src, index) => (
-            <div id="assets-main-flex-container-wrapper" key={index}>
-              <img id="assets-main-flex-container-wrapper-img" src={src} alt="Download image" />
+            <div className="assets-main-flex-container-wrapper" key={index}>
+              <img className="assets-main-flex-container-wrapper-img" src={src} alt="Download image" />
               <button
-                id="assets-main-flex-container-wrapper-download-btn"
+                className="assets-main-flex-container-wrapper-download-btn"
                 onClick={() => handleDownload(src)}
               >Download</button>
             </div>

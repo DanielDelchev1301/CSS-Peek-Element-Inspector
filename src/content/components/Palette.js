@@ -36,15 +36,15 @@ const Palette = ({setTabOpen, popupOnRight}) => {
   }, []);
 
   return (
-    <div id="element-palette-overlay" className={popupOnRight ? "popup-right" : "popup-left"}>
-      <button id="close-palette-btn" onClick={() => setTabOpen(state => ({...state, palette: false}))}>Close</button>
+    <div className={`element-palette-overlay ${popupOnRight ? "popup-right" : "popup-left"}`}>
+      <button className="close-palette-btn" onClick={() => setTabOpen(state => ({...state, palette: false}))}>Close</button>
       <h3 style={{color: "#676767"}}>Color Palette</h3>
 
-      <div id="palette-main-flex-container">
+      <div className="palette-main-flex-container">
         {paletteColors.length 
           ? paletteColors.map((color, index) => (
             <div
-              id="palette-container-color-box"
+              className="palette-container-color-box"
               key={index} 
               style={{backgroundColor: color, border: `1px solid ${color}`}}
               onClick={e => handleClickColor(color, e)}

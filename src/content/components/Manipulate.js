@@ -21,11 +21,11 @@ const Manipulate = ({setTabOpen, popupOnRight, clickedElement}) => {
   };
 
   return (
-    <div id="element-manipulate-overlay" className={popupOnRight ? "popup-right" : "popup-left"}>
-      <button id="close-manipulate-btn" onClick={() => setTabOpen(state => ({...state, manipulate: false}))}>Close</button>
+    <div className={`element-manipulate-overlay ${popupOnRight ? "popup-right" : "popup-left"}`}>
+      <button className="close-manipulate-btn" onClick={() => setTabOpen(state => ({...state, manipulate: false}))}>Close</button>
       <h3 style={{color: "#676767"}}>Manipulate element</h3>
 
-      <div id="manipulate-main-flex-container">
+      <div className="manipulate-main-flex-container">
         {Object.values(PROPERTIES).map((property, index) => (
           <div key={index} className="label-value-container">
             <label htmlFor={property}>{property}</label>

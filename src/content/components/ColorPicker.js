@@ -21,11 +21,11 @@ const ColorPickerComponent = ({setTabOpen, popupOnRight}) => {
 
   return (
     <div className={`element-color-picker-overlay ${popupOnRight ? "popup-right" : "popup-left"}`}>
-      <button id="close-color-picker-btn" onClick={() => setTabOpen(state => ({...state, colorPicker: false}))}>Close</button>
+      <button className="close-color-picker-btn" onClick={() => setTabOpen(state => ({...state, colorPicker: false}))}>Close</button>
       <h3 style={{color: "#676767"}}>Color Picker</h3>
 
       <button
-        id="pick-from-page-btn"
+        className="pick-from-page-btn"
         onClick={handlePickFromPage}
       >
         Pick from page
