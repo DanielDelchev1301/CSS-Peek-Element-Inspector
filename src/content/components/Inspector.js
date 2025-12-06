@@ -5,6 +5,7 @@ import Palette from "./Palette.js";
 import Typography from "./Typography.js";
 import Manipulate from "./Manipulate.js";
 import ColorPickerComponent from "./ColorPicker.js";
+import DesignCompare from "./DesignCompare.js";
 
 const Inspector = () => {
   const [popupOnRight , setPopupOnRight] = useState(true);
@@ -16,7 +17,8 @@ const Inspector = () => {
     palette: false,
     typography: false,
     manipulate: false,
-    colorPicker: false
+    colorPicker: false,
+    design: false
   });
 
   const highlightedElementBoxRef = useRef(null);
@@ -173,6 +175,7 @@ const Inspector = () => {
           <button className="popup-typography-btn" onClick={() => setTabOpen(state => ({...state, typography: true}))}>Typography</button>
           <button className="popup-manipulate-btn" onClick={() => setTabOpen(state => ({...state, manipulate: true}))}>Manipulate</button>
           <button className="popup-color-picker-btn" onClick={() => setTabOpen(state => ({...state, colorPicker: true}))}>Color Picker</button>
+          <button className="popup-design-compare-btn" onClick={() => setTabOpen(state => ({...state, design: true}))}>Design Compare</button>
           {clickedElementRef.current ? getTagIdAndClasses() : null}
           <pre>{clickedElementRef.current ? populateAllCssStyles() : null}</pre>
         </div>
@@ -196,6 +199,10 @@ const Inspector = () => {
       }
       {tabOpen.colorPicker 
         ? <ColorPickerComponent setTabOpen={setTabOpen} popupOnRight={popupOnRight} /> 
+        : null
+      }
+      {tabOpen.design 
+        ? <DesignCompare setTabOpen={setTabOpen} popupOnRight={popupOnRight} /> 
         : null
       }
       {hidePopup ?
