@@ -162,10 +162,10 @@ const Inspector = () => {
       <div className={`element-info-overlay ${popupOnRight ? "popup-right" : "popup-left"}`} ref={overlayRef}>
         <canvas width="250" height="250" ref={canvasRef}/>
         <div style={{fontSize: "10px", marginTop: "4px", display: "flex", gap: "10px"}}>
-          <div><span style={{display:"inline-block",width:"12px",height:"12px",background:"rgba(255,200,200,0.5)",marginRight:"4px"}}></span> Margin</div>
-          <div><span style={{display:"inline-block",width:"12px",height:"12px",background:"rgba(255,150,50,0.5)",marginRight:"4px"}}></span> Border</div>
-          <div><span style={{display:"inline-block",width:"12px",height:"12px",background:"rgba(100,150,255,0.5)",marginRight:"4px"}}></span> Padding</div>
-          <div><span style={{display:"inline-block",width:"12px",height:"12px",background:"rgba(150,255,150,0.5)",marginRight:"4px"}}></span> Content</div>
+          <div><span style={{display:"inline-block",width:"12px",height:"12px",background:"rgb(255, 220, 220)",marginRight:"4px"}}></span> Margin</div>
+          <div><span style={{display:"inline-block",width:"12px",height:"12px",background:"rgb(253, 170, 70)",marginRight:"4px"}}></span> Border</div>
+          <div><span style={{display:"inline-block",width:"12px",height:"12px",background:"rgb(100,170,255)",marginRight:"4px"}}></span> Padding</div>
+          <div><span style={{display:"inline-block",width:"12px",height:"12px",background:"rgb(170,255,170)",marginRight:"4px"}}></span> Content</div>
         </div>
         <div className="element-box">
           <button className="popup-hide-btn" onClick={() => handleHideShowBtn(true, () => overlayRef.current.style.display = "none", setHidePopup)}>Hide</button>
@@ -201,10 +201,7 @@ const Inspector = () => {
         ? <ColorPickerComponent setTabOpen={setTabOpen} popupOnRight={popupOnRight} /> 
         : null
       }
-      {tabOpen.design 
-        ? <DesignCompare setTabOpen={setTabOpen} popupOnRight={popupOnRight} /> 
-        : null
-      }
+      <DesignCompare open={tabOpen.design} setTabOpen={setTabOpen} popupOnRight={popupOnRight} hidePopup={hidePopup} setHidePopup={setHidePopup} overlayRef={overlayRef} /> 
       {hidePopup ?
         <div className={`element-hidden-overlay ${popupOnRight ? "popup-right" : "popup-left"}`}>
           <button 

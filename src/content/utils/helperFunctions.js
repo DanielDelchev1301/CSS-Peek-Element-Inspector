@@ -81,28 +81,28 @@ export const createBoxModelVisualization = (boxModelData, canvas) => {
   let size = canvasSize;
 
   // Margin
-  ctx.fillStyle = 'rgba(255, 200, 200, 0.5)';
+  ctx.fillStyle = 'rgb(255, 220, 220)';
   ctx.fillRect(x, y, size, size);
 
   // Border
   x += layerThickness;
   y += layerThickness;
   size -= layerThickness * 2;
-  ctx.fillStyle = 'rgba(255, 150, 50, 0.5)';
+  ctx.fillStyle = 'rgb(253, 170, 70)';
   ctx.fillRect(x, y, size, size);
 
   // Padding
   x += layerThickness;
   y += layerThickness;
   size -= layerThickness * 2;
-  ctx.fillStyle = 'rgba(100, 150, 255, 0.5)';
+  ctx.fillStyle = 'rgb(100,170,255)';
   ctx.fillRect(x, y, size, size);
 
   // Content
   x += layerThickness;
   y += layerThickness;
   size -= layerThickness * 2;
-  ctx.fillStyle = 'rgba(150, 255, 150, 0.5)';
+  ctx.fillStyle = 'rgb(170,255,170)';
   ctx.fillRect(x, y, size, size);
 
   // TEXT

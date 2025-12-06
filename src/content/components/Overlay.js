@@ -6,7 +6,13 @@ const Overlay = () => {
 
   useEffect(() => {
     const onEnable = () => setEnabled(true);
-    const onDisable = () => setEnabled(false);
+    const onDisable = () => {
+      setEnabled(false);
+      const img = document.getElementsByClassName("whole-page-preview-image")[0];
+      if (img) {
+        document.body.removeChild(img);
+      }
+    }
 
     window.addEventListener("EXT_ENABLE", onEnable);
     window.addEventListener("EXT_DISABLE", onDisable);
