@@ -1,4 +1,4 @@
-export const isInOverlay = (el) => !!el.closest?.("#element-inspector-extension-container-shadow-host, #element-info-overlay, #element-assets-overlay, #element-palette-overlay, #element-typography-overlay, #element-manipulate-overlay, #element-color-picker-overlay, #element-highlighted-element-box");
+export const isInOverlay = (el) => !!el.closest?.("#element-inspector-extension-container-shadow-host, .element-info-overlay, .element-hidden-overlay, .element-assets-overlay, .element-palette-overlay, .element-typography-overlay, .element-manipulate-overlay, .element-color-picker-overlay, .element-highlighted-element-box");
 
 export const PROPERTIES = {
   display: "display",
@@ -20,7 +20,7 @@ export const PROPERTIES = {
   boxShadow: "boxShadow",
 };
 
-export const getStructuredCSSHtml = (el) => {
+export const getStructuredCSSHtml = () => {
   const sections = {
     "Font & Text": [
       "font", "font-family", "font-size", "font-weight", "line-height",
@@ -151,4 +151,9 @@ export const applyClickedEffect = (e) => {
 export const handleClickColor = (color, e) => {
   navigator.clipboard.writeText(color);
   applyClickedEffect(e);
+};
+
+export const handleHideShowBtn = (bool, callback, setHidePopup) => {
+  setHidePopup(bool);
+  if (callback) callback();
 };

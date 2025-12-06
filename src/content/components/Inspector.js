@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { createBoxModelVisualization, getStructuredCSSHtml, isInOverlay } from "../utils/helperFunctions.js";
+import { createBoxModelVisualization, getStructuredCSSHtml, handleHideShowBtn, isInOverlay } from "../utils/helperFunctions.js";
 import Assets from "./Assets.js";
 import Palette from "./Palette.js";
 import Typography from "./Typography.js";
@@ -8,6 +8,7 @@ import ColorPickerComponent from "./ColorPicker.js";
 
 const Inspector = () => {
   const [popupOnRight , setPopupOnRight] = useState(true);
+  const [hidePopup , setHidePopup] = useState(false);
   const [highlightedElementOpts, setHighlightedElementOpts] = useState({});
   const [highlightBoxOpts, setHighlightBoxOpts] = useState({});
   const [tabOpen, setTabOpen] = useState({
@@ -24,10 +25,15 @@ const Inspector = () => {
   const canvasRef = useRef(null);
   const highlightBoxOptsRef = useRef(highlightBoxOpts);
   const clickedElementRef = useRef(null);
+  const hidePopupRef = useRef(hidePopup);
 
   useEffect(() => {
     highlightBoxOptsRef.current = highlightBoxOpts;
   }, [highlightBoxOpts]);
+
+  useEffect(() => {
+    hidePopupRef.current = hidePopup;
+  }, [hidePopup]);
 
   useEffect(() => {
     const highlightedElementBox = highlightedElementBoxRef.current;
@@ -93,8 +99,10 @@ const Inspector = () => {
         tagClassAndIdLabel: `Tag: ${el.tagName}, ID: ${el.id}, Classes: ${el.className}`
       });
 
-      overlay.style.display = "block";
       createBoxModelVisualization(el, canvas);
+      if (!hidePopupRef.current) {
+        overlay.style.display = "block";
+      }
     };
 
     window.addEventListener("mousemove", onMouseMove, true);
@@ -107,7 +115,7 @@ const Inspector = () => {
   }, []);
 
   const populateAllCssStyles = () => {
-    const sections = getStructuredCSSHtml(clickedElementRef.current);
+    const sections = getStructuredCSSHtml();
     const computed = window.getComputedStyle(clickedElementRef.current);
 
     return Object.entries(sections).map(([section, props]) => {
@@ -137,7 +145,6 @@ const Inspector = () => {
     );
   };
 
-
   return (
     <>
       <div className="element-highlighted-element-box" ref={highlightedElementBoxRef}>
@@ -159,6 +166,7 @@ const Inspector = () => {
           <div><span style={{display:"inline-block",width:"12px",height:"12px",background:"rgba(150,255,150,0.5)",marginRight:"4px"}}></span> Content</div>
         </div>
         <div className="element-box">
+          <button className="popup-hide-btn" onClick={() => handleHideShowBtn(true, () => overlayRef.current.style.display = "none", setHidePopup)}>Hide</button>
           <button className="popup-switch-btn" onClick={() => setPopupOnRight(!popupOnRight)}>Switch</button>
           <button className="popup-assets-btn" onClick={() => setTabOpen(state => ({...state, assets: true}))}>Assets</button>
           <button className="popup-palette-btn" onClick={() => setTabOpen(state => ({...state, palette: true}))}>Palette</button>
@@ -190,6 +198,14 @@ const Inspector = () => {
         ? <ColorPickerComponent setTabOpen={setTabOpen} popupOnRight={popupOnRight} /> 
         : null
       }
+      {hidePopup ?
+        <div className={`element-hidden-overlay ${popupOnRight ? "popup-right" : "popup-left"}`}>
+          <button 
+            className="popup-hide-btn"
+            onClick={() => handleHideShowBtn(false, () => overlayRef.current.style.display = "block", setHidePopup)}
+          >Show</button>
+        </div>
+        : null}
     </>
   );
 };
