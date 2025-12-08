@@ -157,3 +157,34 @@ export const handleHideShowBtn = (bool, callback, setHidePopup) => {
   setHidePopup(bool);
   if (callback) callback();
 };
+
+export const getScrollableParent = (el) => {
+  let parent = el.parentElement;
+
+  while (parent) {
+    const style = window.getComputedStyle(parent);
+
+    if (
+      (style.overflowY === "auto" || style.overflowY === "scroll") ||
+      (style.overflowX === "auto" || style.overflowX === "scroll")
+    ) {
+      return parent;
+    }
+
+    parent = parent.parentElement;
+  }
+
+  return window;
+};
+
+export const updateClickedHighlight = (clickedElementRef, highlightedElementBoxRef) => {
+  if (!clickedElementRef.current) return;
+  const rect = clickedElementRef.current.getBoundingClientRect();
+
+  const box = highlightedElementBoxRef.current;
+  box.style.width = rect.width + "px";
+  box.style.height = rect.height + "px";
+  box.style.top = rect.top + "px";
+  box.style.left = rect.left + "px";
+  box.style.display = "flex";
+};

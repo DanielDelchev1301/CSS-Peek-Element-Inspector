@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { createBoxModelVisualization, getStructuredCSSHtml, handleHideShowBtn, isInOverlay } from "../utils/helperFunctions.js";
+import { createBoxModelVisualization, getScrollableParent, getStructuredCSSHtml, handleHideShowBtn, isInOverlay, updateClickedHighlight } from "../utils/helperFunctions.js";
 import Assets from "./Assets.js";
 import Palette from "./Palette.js";
 import Typography from "./Typography.js";
@@ -27,6 +27,7 @@ const Inspector = () => {
   const canvasRef = useRef(null);
   const highlightBoxOptsRef = useRef(highlightBoxOpts);
   const clickedElementRef = useRef(null);
+  const scrollParentRef = useRef(null);
   const hidePopupRef = useRef(hidePopup);
 
   useEffect(() => {
@@ -38,7 +39,23 @@ const Inspector = () => {
   }, [hidePopup]);
 
   useEffect(() => {
-    const highlightedElementBox = highlightedElementBoxRef.current;
+    const handleScroll = () => {
+      updateClickedHighlight(clickedElementRef, highlightedElementBoxRef);
+    };
+
+    let parent = scrollParentRef.current;
+    if (!parent) parent = window;
+
+    parent.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      parent.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [clickedElementRef.current]);
+
+  useEffect(() => {
     const highlightBox = highlightBoxRef.current;
     const overlay = overlayRef.current;
     const canvas = canvasRef.current;
@@ -64,8 +81,8 @@ const Inspector = () => {
       const rect = el.getBoundingClientRect();
       highlightBox.style.width = rect.width + 'px';
       highlightBox.style.height = rect.height + 'px';
-      highlightBox.style.top = rect.top + window.scrollY + 'px';
-      highlightBox.style.left = rect.left + window.scrollX + 'px';
+      highlightBox.style.top = rect.top + 'px';
+      highlightBox.style.left = rect.left + 'px';
       highlightBox.style.display = 'flex';
 
       const sizeLabelCandidate = `${Math.round(rect.width)} x ${Math.round(rect.height)}`;
@@ -82,6 +99,7 @@ const Inspector = () => {
     const onClick = (e) => {
       if (isInOverlay(e.target)) return;
       clickedElementRef.current = e.target;
+      scrollParentRef.current = getScrollableParent(e.target);
 
       e.preventDefault();
       e.stopPropagation();
@@ -90,12 +108,7 @@ const Inspector = () => {
       const elForRect = document.elementFromPoint(e.clientX, e.clientY);
       const rect = elForRect.getBoundingClientRect();
 
-      highlightedElementBox.style.width = rect.width + 'px';
-      highlightedElementBox.style.height = rect.height + 'px';
-      highlightedElementBox.style.top = rect.top + window.scrollY + 'px';
-      highlightedElementBox.style.left = rect.left + window.scrollX + 'px';
-      highlightedElementBox.style.display = 'flex';
-
+      updateClickedHighlight(clickedElementRef, highlightedElementBoxRef);
       setHighlightedElementOpts({ 
         sizeLabel: `${Math.round(rect.width)} x ${Math.round(rect.height)}`,
         tagClassAndIdLabel: `Tag: ${el.tagName}, ID: ${el.id}, Classes: ${el.className}`
