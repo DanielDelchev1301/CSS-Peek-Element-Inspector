@@ -163,37 +163,11 @@ Shift + E → Activate height mode
 ↓   Decrease height
 ```
 
----
+### **8. Exit Current Mode**
 
-## 🧠 Technical Overview
-
-### Shadow DOM Usage
-
-The extension injects a root React app inside a Shadow DOM to avoid CSS conflicts with the target website.
-
-### Highlight Rendering
-
-Each highlight box is rendered **inside the Shadow DOM**, but its position calculations use:
-
-* `getBoundingClientRect()`
-* Scroll offsets of every scrollable parent
-
-### Scrollable Parent Detection
-
-The extension automatically finds the closest scrollable parent using computed styles:
-
-```js
-overflow: auto;
-overflow: scroll;
 ```
-
-### Drag & Drop Zone
-
-Implemented with native HTML drag events — no external libraries.
-
-### Image Drop on Element
-
-Each selected element (if **img**) receives a dynamically attached `ondrop` & `ondragover` listener.
+Esc → Exit current adjustment mode
+```
 
 ---
 
