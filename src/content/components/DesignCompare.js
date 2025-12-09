@@ -10,6 +10,10 @@ const DesignCompare = ({open, setTabOpen, popupOnRight, hidePopup, setHidePopup,
   const imageRef = useRef(null);
 
   useEffect(() => {
+    if (imageRef.current) {
+      document.body.removeChild(imageRef.current);
+      imageRef.current = null;
+    }
     if (image) {
       const img = document.createElement("img");
       img.src = URL.createObjectURL(image);
