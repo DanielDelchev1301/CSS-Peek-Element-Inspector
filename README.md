@@ -1,6 +1,6 @@
 # Design Comparator Browser Extension
 
-A Chrome/Edge browser extension that helps front‑end developers and designers quickly inspect any element on a webpage and instantly visualize its CSS box model, styles, colors, and typography and more.
+A Chrome/Edge browser extension that helps front‑end developers and designers quickly inspect any element on a webpage and instantly visualize its CSS box model, styles, colors, typography and more.
 
 Below is the full documentation of the extension, its features, keyboard shortcuts, and usage instructions.
 
