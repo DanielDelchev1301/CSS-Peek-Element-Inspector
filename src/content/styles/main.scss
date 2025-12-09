@@ -27,7 +27,7 @@
       border: 1px solid gray;
       border-radius: 5px;
       padding: 10px;
-      font-size: 20px;
+      font-size: 18px;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -78,6 +78,12 @@
           overflow-x: auto;
         }
       }
+    }
+
+    .info-message-for-current-mode-in-use {
+      margin-top: 8px;
+      font-size: 12px;
+      background-color: #e3edf7;
     }
   }
 
@@ -515,7 +521,6 @@
 
 .element-highlight-box {
   border: 2px solid rgb(162, 0, 255);
-  background-color: rgba(162, 0, 255, 0.1);
 
   .element-size-label, .element-tag-class-label {
     color: rgb(211, 134, 255);
@@ -524,7 +529,6 @@
 
 .element-highlighted-element-box {
   border: 2px solid rgb(0, 255, 85);
-  background-color: rgba(0, 255, 85, 0.1);
 
   .element-highlighted-size-label, .element-highlighted-tag-class-label {
     color: rgb(0, 255, 85);

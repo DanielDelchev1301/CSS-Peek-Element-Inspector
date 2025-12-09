@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { 
   allowDrop, 
+  applyChangeToElement, 
   createBoxModelVisualization, 
+  getHSLFromComputedStyle, 
   getScrollableParent, 
   getStructuredCSSHtml, 
   handleDrop, 
@@ -21,6 +23,7 @@ const Inspector = () => {
   const [hidePopup , setHidePopup] = useState(false);
   const [highlightedElementOpts, setHighlightedElementOpts] = useState({});
   const [highlightBoxOpts, setHighlightBoxOpts] = useState({});
+  const [mode, setMode] = useState(null);
   const [tabOpen, setTabOpen] = useState({
     assets: false,
     palette: false,
@@ -38,6 +41,10 @@ const Inspector = () => {
   const clickedElementRef = useRef(null);
   const scrollParentRef = useRef(null);
   const hidePopupRef = useRef(hidePopup);
+
+  const modeRef = useRef(null);
+  const currentHSL = useRef({h: 0, s: 0, l: 0});
+  const colorMode = useRef(null);
 
   useEffect(() => {
     highlightBoxOptsRef.current = highlightBoxOpts;
@@ -114,6 +121,10 @@ const Inspector = () => {
       }
 
       clickedElementRef.current = e.target;
+      currentHSL.current = getHSLFromComputedStyle(e.target);
+      colorMode.current = null;
+      modeRef.current = null;
+      setMode(null);
 
       if (clickedElementRef.current.tagName === "IMG") {
         clickedElementRef.current.addEventListener("drop", (e) => handleDrop(e, clickedElementRef));
@@ -141,12 +152,88 @@ const Inspector = () => {
       }
     };
 
+    const onKeyDown = (e) => {
+      if (!clickedElementRef.current) return;
+
+      // SHIFT + ALT + L → Lightness
+      if (e.shiftKey && e.code === "KeyL") {
+        modeRef.current = "color";
+        colorMode.current = "l";
+        return;
+      }
+      // SHIFT + ALT + H → Hue
+      if (e.shiftKey && e.code === "KeyH") {
+        modeRef.current = "color";
+        colorMode.current = "h";
+        return;
+      }
+      // SHIFT + ALT + S → Saturation
+      if (e.shiftKey && e.code === "KeyS") {
+        modeRef.current = "color";
+        colorMode.current = "s";
+        return;
+      }
+      // SHIFT + F → font size
+      if (e.shiftKey && e.code === "KeyF") {
+        modeRef.current = "fontSize";
+        return;
+      }
+      // SHIFT + M → margin
+      if (e.shiftKey && e.code === "KeyM") {
+        modeRef.current = "margin";
+        return;
+      }
+      // SHIFT + B → border width
+      if (e.shiftKey && e.code === "KeyB") {
+        modeRef.current = "borderWidth";
+        return;
+      }
+      // SHIFT + P → padding
+      if (e.shiftKey && e.code === "KeyP") {
+        modeRef.current = "padding";
+        return;
+      }
+      // SHIFT + W → width
+      if (e.shiftKey && e.code === "KeyW") {
+        modeRef.current = "width";
+        return;
+      }
+      // SHIFT + E → height
+      if (e.shiftKey && e.code === "KeyE") {
+        modeRef.current = "height";
+        return;
+      }
+
+      if (!modeRef.current) return;
+
+      if (e.code === "ArrowUp") {
+        e.preventDefault();
+        applyChangeToElement(clickedElementRef.current, modeRef.current, colorMode.current, currentHSL.current, +1);
+      }
+
+      if (e.code === "ArrowDown") {
+        e.preventDefault();
+        applyChangeToElement(clickedElementRef.current, modeRef.current, colorMode.current, currentHSL.current, -1);
+      }
+
+      if (mode !== modeRef.current) {
+        setMode({type: modeRef.current, colorMode: colorMode.current});
+      }
+
+      if (e.code === "Escape") {
+        modeRef.current = null;
+        setMode(null);
+      }
+    };
+
     window.addEventListener("mousemove", onMouseMove, true);
     window.addEventListener("click", onClick, true);
+    window.addEventListener("keydown", onKeyDown);
 
     return () => {
       window.removeEventListener("mousemove", onMouseMove, true);
       window.removeEventListener("click", onClick, true);
+      window.removeEventListener("keydown", onKeyDown);
     };
   }, []);
 
@@ -210,6 +297,7 @@ const Inspector = () => {
           <button className="popup-manipulate-btn" onClick={() => setTabOpen(state => ({...state, manipulate: true}))}>Manipulate</button>
           <button className="popup-color-picker-btn" onClick={() => setTabOpen(state => ({...state, colorPicker: true}))}>Color Picker</button>
           <button className="popup-design-compare-btn" onClick={() => setTabOpen(state => ({...state, design: true}))}>Design Compare</button>
+          {mode ? <div className="info-message-for-current-mode-in-use"> &#9432; Mode: {mode.type}{mode.type === "color" ? ` (${mode.colorMode?.toUpperCase()})` : ""} - Use Up/Down arrows to adjust, Esc to exit</div> : null}
           {clickedElementRef.current ? getTagIdAndClasses() : null}
           <pre>{clickedElementRef.current ? populateAllCssStyles() : null}</pre>
         </div>

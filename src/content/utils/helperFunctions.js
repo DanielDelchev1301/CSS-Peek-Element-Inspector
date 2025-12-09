@@ -207,3 +207,101 @@ export const handleDrop = (e, clickedElementRef) => {
   };
   reader.readAsDataURL(file);
 };
+
+export const applyChangeToElement = (element, mode, colorMode, currentHSL, delta) => {
+  const style = element.style;
+
+  switch (mode) {
+    case "color": {
+      switch (colorMode) {
+        case "h":
+          if (delta) currentHSL.h = (currentHSL.h + delta) % 360;
+          if (!delta) currentHSL.h = (currentHSL.h + delta + 360) % 360;
+          break;
+        case "s":
+          if (delta) currentHSL.s = Math.min(100, currentHSL.s + delta);
+          if (!delta) currentHSL.s = Math.max(0, currentHSL.s + delta);
+          break;
+        case "l":
+          if (delta) currentHSL.l = Math.min(100, currentHSL.l + delta);
+          if (!delta) currentHSL.l = Math.max(0, currentHSL.l + delta);
+          break;
+      }
+
+      element.style.color = `hsl(${currentHSL.h}, ${currentHSL.s}%, ${currentHSL.l}%)`;
+      break;
+    }
+    case "fontSize": {
+      const current = parseFloat(getComputedStyle(element).fontSize);
+      style.fontSize = (current + delta) + "px";
+      break;
+    }
+    case "margin": {
+      const current = parseFloat(getComputedStyle(element).margin);
+      style.margin = (current + delta) + "px";
+      break;
+    }
+    case "borderWidth": {
+      const current = parseFloat(getComputedStyle(element).borderWidth);
+      style.borderWidth = (current + delta) + "px";
+      break;
+    }
+    case "padding": {
+      const current = parseFloat(getComputedStyle(element).padding);
+      style.padding = (current + delta) + "px";
+      break;
+    }
+    case "width": {
+      const current = parseFloat(getComputedStyle(element).width);
+      style.width = (current + delta) + "px";
+      break;
+    }
+    case "height": {
+      const current = parseFloat(getComputedStyle(element).height);
+      style.height = (current + delta) + "px";
+      break;
+    }
+    default:
+      break;
+  }
+};
+
+export const getHSLFromComputedStyle = (el) => {
+  const computed = window.getComputedStyle(el);
+  const rgb = computed.color;
+
+  const match = rgb.match(/rgb\((\d+), (\d+), (\d+)\)/);
+  if (!match) return { h: 0, s: 0, l: 50 };
+
+  const r = parseInt(match[1], 10) / 255;
+  const g = parseInt(match[2], 10) / 255;
+  const b = parseInt(match[3], 10) / 255;
+
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h = 0, s = 0;
+  const l = (max + min) / 2;
+
+  const d = max - min;
+  if (d !== 0) {
+    s = d / (1 - Math.abs(2 * l - 1));
+    switch (max) {
+      case r:
+        h = 60 * (((g - b) / d) % 6);
+        break;
+      case g:
+        h = 60 * ((b - r) / d + 2);
+        break;
+      case b:
+        h = 60 * ((r - g) / d + 4);
+        break;
+    }
+  }
+
+  if (h < 0) h += 360;
+
+  return {
+    h: Math.round(h),
+    s: Math.round(s * 100),
+    l: Math.round(l * 100),
+  };
+};
