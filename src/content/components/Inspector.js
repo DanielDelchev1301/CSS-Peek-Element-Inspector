@@ -271,7 +271,7 @@ const Inspector = () => {
           <span className="attribute" key={attr.name}>
             <span className="attribute-name">{attr.name}</span>
             <span className="tag-with-bracket">="</span>
-            <span className="attribute-value">{attr.value}</span>
+            <span className="attribute-value">{attr.value.length > 200 ? attr.value.substring(0, 200) + "..." : attr.value}</span>
             <span className="tag-with-bracket">"</span>
           </span>
         ))}
