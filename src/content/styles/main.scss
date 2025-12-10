@@ -111,6 +111,34 @@
       font-size: 12px;
       background-color: #e3edf7;
     }
+
+    .info-message-for-inactive-mode {
+      width: fit-content;
+      margin-top: 8px;
+      border-radius: 50%;
+      font-size: 20px;
+      background-color: #e3edf7;
+    }
+
+    .tooltip-for-inactive-mode {
+      display: none;
+      background-color: #4f4f4f;
+      position: absolute;
+      border-radius: 5px;
+      color: white;
+      padding: 8px;
+      top: 60px;
+      gap: 10px;
+
+      p {
+        margin: 0px;
+        font-size: 10px;
+      }
+    }
+
+    .info-message-for-inactive-mode:hover + .tooltip-for-inactive-mode {
+      display: flex;
+    }
   }
 
 

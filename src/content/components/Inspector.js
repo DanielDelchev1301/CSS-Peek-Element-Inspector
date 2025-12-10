@@ -155,19 +155,19 @@ const Inspector = () => {
     const onKeyDown = (e) => {
       if (!clickedElementRef.current) return;
 
-      // SHIFT + ALT + L → Lightness
+      // SHIFT + L → Lightness
       if (e.shiftKey && e.code === "KeyL") {
         modeRef.current = "color";
         colorMode.current = "l";
         return;
       }
-      // SHIFT + ALT + H → Hue
+      // SHIFT + H → Hue
       if (e.shiftKey && e.code === "KeyH") {
         modeRef.current = "color";
         colorMode.current = "h";
         return;
       }
-      // SHIFT + ALT + S → Saturation
+      // SHIFT + S → Saturation
       if (e.shiftKey && e.code === "KeyS") {
         modeRef.current = "color";
         colorMode.current = "s";
@@ -316,7 +316,32 @@ const Inspector = () => {
           <button className="popup-manipulate-btn" onClick={() => setTabOpen(state => ({...state, manipulate: true}))}>Manipulate</button>
           <button className="popup-color-picker-btn" onClick={() => setTabOpen(state => ({...state, colorPicker: true}))}>Color Picker</button>
           <button className="popup-design-compare-btn" onClick={() => setTabOpen(state => ({...state, design: true}))}>Design Compare</button>
-          {mode ? <div className="info-message-for-current-mode-in-use"> &#9432; Mode: {mode.type}{mode.type === "color" ? ` (${mode.colorMode?.toUpperCase()})` : ""} - Use Up/Down arrows to adjust, Esc to exit</div> : null}
+          {mode 
+            ? <div className="info-message-for-current-mode-in-use"> &#9432; Mode: {mode.type}{mode.type === "color" ? ` (${mode.colorMode?.toUpperCase()})` : ""} - Use Up/Down arrows to adjust, Esc to exit</div> 
+            : <>
+              <div className="info-message-for-inactive-mode">&#9432;</div>
+              <div className="tooltip-for-inactive-mode">
+                <div>
+                  <p><strong>Activate Mode:</strong></p>
+                  <p>SHIFT + L → color (Lightness)</p>
+                  <p>SHIFT + H → color (Hue)</p>
+                  <p>SHIFT + S → color (Saturation)</p>
+                  <p>SHIFT + F → font size</p>
+                  <p>SHIFT + M → margin</p>
+                  <p>SHIFT + B → border width</p>
+                  <p>SHIFT + P → padding</p>
+                  <p>SHIFT + W → width</p>
+                  <p>SHIFT + E → height</p>
+                </div>
+                <div>
+                  <p><strong>While in Mode:</strong></p>
+                  <p>UP Arrow → increase value</p>
+                  <p>DOWN Arrow → decrease value</p>
+                  <p>ESC → exit mode</p>
+                </div>
+              </div>
+            </>
+          }
           {clickedElementRef.current ? getTagIdAndClasses() : null}
           <pre>{clickedElementRef.current ? populateAllCssStyles() : null}</pre>
         </div>
