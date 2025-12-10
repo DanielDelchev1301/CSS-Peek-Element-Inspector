@@ -255,16 +255,35 @@ const Inspector = () => {
   };
 
   const getTagIdAndClasses = () => {
-    const tag = clickedElementRef.current.tagName;
-    const id = clickedElementRef.current.id ? `#${clickedElementRef.current.id}` : "";
-    const classes = clickedElementRef.current.className ? `.${String(clickedElementRef.current.className).split(" ").join(".")}` : "";
-
+    const tag = clickedElementRef.current.tagName.toLowerCase();
+    const allAttributes = Array.from(clickedElementRef.current.attributes).map(attr => ({
+      name: attr.name,
+      value: attr.value
+    }));
+    
     return (
-      <h2 style={{overflowWrap: "break-word"}}>
-        <span>Tag: {tag}</span>
-        <span>ID: {id}</span>
-        <span>Classes: {classes}</span>
-      </h2>
+      <p className="element-tag-id-classes-preview">
+        {allAttributes.length 
+          ? <span className="tag-with-bracket">&#10092;{tag}</span> 
+          : <span className="tag-with-bracket">&#10092;{tag}&#10093;<span className="children-preview">...</span>&#10092;/{tag}&#10093;</span> 
+        }
+        {allAttributes.map(attr => (
+          <span key={attr.name}>
+            <span className="attribute-name">{attr.name}</span>
+            <span className="tag-with-bracket">="</span>
+            <span className="attribute-value">{attr.value}</span>
+            <span className="tag-with-bracket">"</span>
+          </span>
+        ))}
+        {allAttributes.length 
+          ? <>
+            <span className="tag-with-bracket">&#10093;</span> 
+            <span className="children-preview">...</span>
+            <span className="tag-with-bracket">&#10092;/{tag}&#10093;</span>
+          </>
+          : null
+        }
+      </p>
     );
   };
 
